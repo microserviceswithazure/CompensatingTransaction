@@ -3,10 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "CompensatingTransaction", "CompensatingTransaction\CompensatingTransaction.sfproj", "{6AE5D10A-6920-45A2-A2F1-2B70DF71B005}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelBookingService", "TravelBookingService\TravelBookingService.csproj", "{8BDCFD02-6075-42E1-BD65-5BE92C6F861F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{4AA9BB9E-B987-4146-A546-23F4F5FB1172}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workflow", "Workflow\Workflow.csproj", "{9B00406B-AE0B-4DA6-BF5D-0EE16C902E87}"
@@ -19,20 +15,6 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6AE5D10A-6920-45A2-A2F1-2B70DF71B005}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{6AE5D10A-6920-45A2-A2F1-2B70DF71B005}.Debug|x64.ActiveCfg = Debug|x64
-		{6AE5D10A-6920-45A2-A2F1-2B70DF71B005}.Debug|x64.Build.0 = Debug|x64
-		{6AE5D10A-6920-45A2-A2F1-2B70DF71B005}.Debug|x64.Deploy.0 = Debug|x64
-		{6AE5D10A-6920-45A2-A2F1-2B70DF71B005}.Release|Any CPU.ActiveCfg = Release|x64
-		{6AE5D10A-6920-45A2-A2F1-2B70DF71B005}.Release|x64.ActiveCfg = Release|x64
-		{6AE5D10A-6920-45A2-A2F1-2B70DF71B005}.Release|x64.Build.0 = Release|x64
-		{6AE5D10A-6920-45A2-A2F1-2B70DF71B005}.Release|x64.Deploy.0 = Release|x64
-		{8BDCFD02-6075-42E1-BD65-5BE92C6F861F}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{8BDCFD02-6075-42E1-BD65-5BE92C6F861F}.Debug|x64.ActiveCfg = Debug|x64
-		{8BDCFD02-6075-42E1-BD65-5BE92C6F861F}.Debug|x64.Build.0 = Debug|x64
-		{8BDCFD02-6075-42E1-BD65-5BE92C6F861F}.Release|Any CPU.ActiveCfg = Release|x64
-		{8BDCFD02-6075-42E1-BD65-5BE92C6F861F}.Release|x64.ActiveCfg = Release|x64
-		{8BDCFD02-6075-42E1-BD65-5BE92C6F861F}.Release|x64.Build.0 = Release|x64
 		{4AA9BB9E-B987-4146-A546-23F4F5FB1172}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4AA9BB9E-B987-4146-A546-23F4F5FB1172}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4AA9BB9E-B987-4146-A546-23F4F5FB1172}.Debug|x64.ActiveCfg = Debug|Any CPU
