@@ -76,6 +76,7 @@
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HttpCommunicationListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TravelBookingService.cs" />
     <Compile Include="Program.cs" />

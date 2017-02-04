@@ -9,43 +9,56 @@ using Microsoft.ServiceFabric.Services.Runtime;
 
 namespace TravelBookingService
 {
+    using System.Fabric.Description;
+    using System.Net;
+    using System.Text;
+
+    using Microsoft.ServiceFabric.Services.Client;
+
     /// <summary>
     /// An instance of this class is created for each service instance by the Service Fabric runtime.
     /// </summary>
     internal sealed class TravelBookingService : StatelessService
     {
+        private StatelessServiceContext context;
+
         public TravelBookingService(StatelessServiceContext context)
             : base(context)
-        { }
-
-        /// <summary>
-        /// Optional override to create listeners (e.g., TCP, HTTP) for this service replica to handle client or user requests.
-        /// </summary>
-        /// <returns>A collection of listeners.</returns>
-        protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {
-            return new ServiceInstanceListener[0];
+            this.context = context;
+
         }
 
-        /// <summary>
-        /// This is the main entry point for your service instance.
-        /// </summary>
-        /// <param name="cancellationToken">Canceled when Service Fabric needs to shut down this service instance.</param>
-        protected override async Task RunAsync(CancellationToken cancellationToken)
+        protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {
-            // TODO: Replace the following sample code with your own logic 
-            //       or remove this RunAsync override if it's not needed in your service.
+            return new[] { new ServiceInstanceListener(context => this.CreateInputListener(context)) };
+        }
 
-            long iterations = 0;
+        private ICommunicationListener CreateInputListener(ServiceContext context)
+        {
+            EndpointResourceDescription inputEndpoint = context.CodePackageActivationContext.GetEndpoint("WebEndpoint");
+            string uriPrefix = String.Format("{0}://+:{1}/travelservice/", inputEndpoint.Protocol, inputEndpoint.Port);
+            string uriPublished = uriPrefix.Replace("+", FabricRuntime.GetNodeContext().IPAddressOrFQDN);
+            return new HttpCommunicationListener(uriPrefix, uriPublished, this.ProcessInputRequest);
+        }
 
-            while (true)
+        private Task ProcessInputRequest(HttpListenerContext context, CancellationToken cancellationToken)
+        {
+            byte[] buffer = Encoding.UTF8.GetBytes("Hello World");
+            context.Response.AddHeader("Connection", "close");
+            context.Response.ContentType = "application/json; charset=utf-8";
+
+            for (int i = 0; i < 10; ++i)
             {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                ServiceEventSource.Current.ServiceMessage(this.Context, "Working-{0}", ++iterations);
-
-                await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
+                context.Response.OutputStream.Write(buffer, 0, buffer.Length);
+                context.Response.OutputStream.Flush();
             }
+
+            context.Response.Close();
+
+         
+
+            return Task.FromResult(1);
         }
     }
 }
