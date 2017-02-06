@@ -26,7 +26,13 @@
 
         public T ReadLog<T>(string key)
         {
-            return JsonConvert.DeserializeObject<T>(this.cache.StringGet(key));
+            var value = this.cache.StringGet(key);
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return default(T);
+            }
+
+            return JsonConvert.DeserializeObject<T>(value);
         }
 
         public void WriteLog<T>(string key, T logObject)
