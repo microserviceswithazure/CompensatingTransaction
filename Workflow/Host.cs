@@ -116,9 +116,16 @@ namespace Workflow
             };
             await sender.SendAsync(message);
             Console.WriteLine("Sending booking message. Press any key after the workflow completes.");
-            Console.ReadKey();
-            sagaTerminator.Cancel();
-            await saga.Task;
+            var iter = saga.GetEnumerator();
+            while (iter.MoveNext())
+            {
+                var task = (Task)iter.Current;
+                task.RunSynchronously();
+            }
+
+            ////Console.ReadKey();
+            //sagaTerminator.Cancel();
+            //await saga.Task;
         }
 
         public async Task DeleteQueues()
