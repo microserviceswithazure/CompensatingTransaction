@@ -42,6 +42,9 @@ namespace Client
             cache.WriteLog("walletBalance", booking.CreditLimit);
             cache.WriteLog("logs", new List<string> { $"Booking process initiated for traveler {booking.TravellerName}" });
             await host.BookTravel(booking);
+            Console.WriteLine("Clearing workflow. Please wait.");
+            await host.DeleteQueues();
+            Console.WriteLine("Booking completed. Press any key to exit.");
         }
 
         private static string ReadInputForMessage(string command)

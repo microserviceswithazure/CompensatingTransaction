@@ -91,6 +91,7 @@ namespace Workflow
                                         {"Via", via}
                                     });
                     }
+
                     scope.Complete();
                 }
             }
@@ -150,7 +151,7 @@ namespace Workflow
                             // done with this job
                             await message.CompleteAsync();
                             cache.WriteLog("walletBalance", travelBooking.CreditLimit);
-                            logs.Add($"Booked flight with reference {travelBooking.FlightReservationId}");
+                            logs.Add($"Booked hotel with reference {travelBooking.HotelReservationId}");
                             cache.WriteLog("logs", logs);
                         }
                     }
@@ -193,8 +194,6 @@ namespace Workflow
                         var body = message.GetBody<Stream>();
                         Booking travelBooking = DeserializeTravelBooking(body);
 
-                        // do we want to book a flight? No? Let's just forward the message to
-                        // the next destination via transfer queue
                         if (!string.IsNullOrEmpty(travelBooking.FlightReservationId))
                         {
                             lock (Console.Out)
@@ -270,9 +269,9 @@ namespace Workflow
                         var logs = cache.ReadLog<List<string>>("logs");
                         logs.Add($"Hotel booking cancellation process initiated for traveler {travelBooking.TravellerName}");
                         cache.WriteLog("logs", logs);
+                        Thread.Sleep(TimeSpan.FromSeconds(5));
                         if (!string.IsNullOrEmpty(travelBooking.HotelReservationId))
                         {
-
                             travelBooking.HotelReservationId = string.Empty;
                             travelBooking.CreditLimit += 100;
 
