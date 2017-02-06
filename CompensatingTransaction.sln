@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workflow", "Workflow\Workflow.csproj", "{9B00406B-AE0B-4DA6-BF5D-0EE16C902E87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelBooking", "..\..\Source Control\Ignite\CompensatingTransaction-master\TravelBooking\TravelBooking.csproj", "{CA6D96D5-3BB3-4CE0-A9E3-AC6D065A75B9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelBooking", "TravelBooking\TravelBooking.csproj", "{CA6D96D5-3BB3-4CE0-A9E3-AC6D065A75B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

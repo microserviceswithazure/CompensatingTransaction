@@ -89,7 +89,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Workflow\Workflow.csproj">
+    <ProjectReference Include="..\..\..\..\Projects\CompensatingTransaction\Workflow\Workflow.csproj">
       <Project>{9b00406b-ae0b-4da6-bf5d-0ee16c902e87}</Project>
       <Name>Workflow</Name>
     </ProjectReference>

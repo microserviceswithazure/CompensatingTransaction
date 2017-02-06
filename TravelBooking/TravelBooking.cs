@@ -27,26 +27,25 @@ namespace TravelBooking
 
         private void TravelBooking_Load(object sender, EventArgs e)
         {
-            cache = new CacheLogger();            
+            cache = new CacheLogger();
             BookIt();
             timer1.Enabled = true;
         }
-
+        Host host;
         private async Task BookIt()
         {
-            var host = new Host();
+
+            host = new Host();
+            var cache = new CacheLogger();
 
             cache.DeleteKey("logs");
             cache.DeleteKey("walletBalance");
-            cache.WriteLog("logs", new List<string> { $"Started applciation" });
-            
-
             await host.Run(namespaceAddress, manageKeyName, manageKey);
             var booking = new Booking
             {
-                TravellerName = "Bla",
-                Destination = "New york",
-                CreditLimit = 100M
+                TravellerName = "rahul",
+                Destination = "delhi",
+                CreditLimit = 200
             };
             cache.WriteLog("walletBalance", booking.CreditLimit);
             cache.WriteLog("logs", new List<string> { $"Booking process initiated for traveler {booking.TravellerName}" });
@@ -56,15 +55,23 @@ namespace TravelBooking
         private void timer1_Tick(object sender, EventArgs e)
         {
             var wallet = cache.ReadLog<string>("walletBalance");
-            var log = cache.ReadLog <List<string>>("logs");
+            var log = cache.ReadLog<List<string>>("logs");
             textBox1.Text = "";
-            foreach (var logentry in log)
+            if (log != null)
             {
-                textBox1.Text += logentry;
-                textBox1.Text += Environment.NewLine;
-                wallet.ToString();
-                textBox1.Text += Environment.NewLine;
+                foreach (var logentry in log)
+                {
+                    textBox1.Text += logentry;
+                    textBox1.Text += Environment.NewLine;
+                    wallet.ToString();
+                    textBox1.Text += Environment.NewLine;
+                }
             }
+        }
+
+        private async void button1_Click(object sender, EventArgs e)
+        {
+            await host.DeleteQueues();
         }
     }
 }
