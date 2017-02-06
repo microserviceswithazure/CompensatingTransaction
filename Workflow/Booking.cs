@@ -8,5 +8,7 @@ namespace Workflow
         public string HotelReservationId { get; set; }
 
         public string FlightReservationId { get; set; }
+
+        public string Destination { get; set; }
     }
 }

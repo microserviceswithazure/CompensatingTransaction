@@ -5,6 +5,7 @@ namespace Workflow
     using System.Diagnostics;
     using System.IO;
     using System.Text;
+    using System.Threading;
     using System.Threading.Tasks;
     using System.Transactions;
     using Microsoft.ServiceBus.Messaging;
@@ -12,8 +13,15 @@ namespace Workflow
 
     static class TravelBookingHandlers
     {
+        private static CacheLogger cache;
+
         const string ContentTypeApplicationJson = "application/json";
         const string TravelBookingLabel = "TravelBooking";
+
+        static TravelBookingHandlers()
+        {
+            cache = new CacheLogger();
+        }
 
         public static async Task BookFlight(BrokeredMessage message, MessageSender nextStepQueue, MessageSender compensatorQueue)
         {
@@ -55,12 +63,21 @@ namespace Workflow
                         }
                         else
                         {
+                            var logs = cache.ReadLog<List<string>>("logs");
+                            logs.Add($"Flight booking process initiated for traveler {travelBooking.TravellerName}");
+                            cache.WriteLog("logs", logs);
+                            // Intentionally delayed to mock service call.
+                            Thread.Sleep(TimeSpan.FromSeconds(5));
+
                             // let's pretend we booked something
                             travelBooking.FlightReservationId = "A1B2C3";
                             travelBooking.CreditLimit -= 200;
                             await nextStepQueue.SendAsync(CreateForwardMessage(message, travelBooking, via));
                             // done with this job
                             await message.CompleteAsync();
+                            cache.WriteLog("walletBalance", travelBooking.CreditLimit);
+                            logs.Add($"Booked flight with reference {travelBooking.FlightReservationId}");
+                            cache.WriteLog("logs", logs);
                         }
 
                     }
@@ -122,12 +139,19 @@ namespace Workflow
                         }
                         else
                         {
+                            var logs = cache.ReadLog<List<string>>("logs");
+                            logs.Add($"Hotel booking process initiated for traveler {travelBooking.TravellerName}");
+                            cache.WriteLog("logs", logs);
+                            Thread.Sleep(TimeSpan.FromSeconds(5));
                             // let's pretend we booked something
                             travelBooking.HotelReservationId = "5676891234321";
                             travelBooking.CreditLimit -= 100;
                             await nextStepQueue.SendAsync(CreateForwardMessage(message, travelBooking, via));
                             // done with this job
                             await message.CompleteAsync();
+                            cache.WriteLog("walletBalance", travelBooking.CreditLimit);
+                            logs.Add($"Booked flight with reference {travelBooking.FlightReservationId}");
+                            cache.WriteLog("logs", logs);
                         }
                     }
                     else
@@ -180,9 +204,16 @@ namespace Workflow
                                 Console.ResetColor();
                             }
 
+                            var logs = cache.ReadLog<List<string>>("logs");
+                            logs.Add($"Flight booking cancellation process initiated for traveler {travelBooking.TravellerName}");
+                            cache.WriteLog("logs", logs);
+                            Thread.Sleep(TimeSpan.FromSeconds(5));
                             // reset the id
                             travelBooking.FlightReservationId = string.Empty;
                             travelBooking.CreditLimit += 200;
+                            cache.WriteLog("walletBalance", travelBooking.CreditLimit);
+                            logs.Add($"Applied credit back to payment instrument");
+                            cache.WriteLog("logs", logs);
                         }
 
                         // forward
@@ -236,7 +267,9 @@ namespace Workflow
                     {
                         var body = message.GetBody<Stream>();
                         var travelBooking = DeserializeTravelBooking(body);
-
+                        var logs = cache.ReadLog<List<string>>("logs");
+                        logs.Add($"Hotel booking cancellation process initiated for traveler {travelBooking.TravellerName}");
+                        cache.WriteLog("logs", logs);
                         if (!string.IsNullOrEmpty(travelBooking.HotelReservationId))
                         {
 
@@ -248,6 +281,9 @@ namespace Workflow
 
                         // done with this job
                         await message.CompleteAsync();
+                        cache.WriteLog("walletBalance", travelBooking.CreditLimit);
+                        logs.Add($"Applied credit back to payment instrument");
+                        cache.WriteLog("logs", logs);
                     }
                     else
                     {

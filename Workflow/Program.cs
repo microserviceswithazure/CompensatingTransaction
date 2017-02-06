@@ -33,12 +33,10 @@ namespace Client
             cache.DeleteKey("logs");
             cache.DeleteKey("walletBalance");
             await host.Run(namespaceAddress, manageKeyName, manageKey);
-            var booking = new Booking
-                {
-                    TravellerName = ReadInputForMessage("Enter traveler's name:"),
-                    Destination = ReadInputForMessage("Enter destination:"),
-                    CreditLimit = Convert.ToDecimal(ReadInputForMessage("Enter credit limit:"))
-                };
+            var booking = new Booking();
+            booking.TravellerName = ReadInputForMessage("Enter traveler's name:");
+            booking.Destination = ReadInputForMessage("Enter destination:");
+            booking.CreditLimit = Convert.ToDecimal(ReadInputForMessage("Enter credit limit:"));
             cache.WriteLog("walletBalance", booking.CreditLimit);
             cache.WriteLog("logs", new List<string> { $"Booking process initiated for traveler {booking.TravellerName}" });
             await host.BookTravel(booking);
