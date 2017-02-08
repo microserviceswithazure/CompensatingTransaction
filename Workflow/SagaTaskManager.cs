@@ -38,14 +38,14 @@ namespace Workflow
             var nextStepSender = this.messagingFactory.CreateMessageSender(nextStepQueue, taskQueueName);
             var compensatorSender = this.messagingFactory.CreateMessageSender(compensatorQueue, taskQueueName);
 
-            this.cancellationToken.Register(
-                () =>
-                    {
-                        rcv.Close();
-                        tcs.SetResult(true);
-                    });
+            //this.cancellationToken.Register(
+            //    () =>
+            //        {
+            //            rcv.Close();
+            //            tcs.SetResult(true);
+            //        });
             rcv.OnMessageAsync(m => doWork(m, nextStepSender, compensatorSender), new OnMessageOptions { AutoComplete = false });
-            this.tasks.Add(tcs.Task);
+            //this.tasks.Add(tcs.Task);
         }
     }
 }

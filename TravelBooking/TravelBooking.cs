@@ -35,21 +35,8 @@ namespace TravelBooking
         private async Task BookIt()
         {
 
-            host = new Host();
-            var cache = new CacheLogger();
 
-            cache.DeleteKey("logs");
-            cache.DeleteKey("walletBalance");
-            await host.Run(namespaceAddress, manageKeyName, manageKey);
-            var booking = new Booking
-            {
-                TravellerName = "rahul",
-                Destination = "delhi",
-                CreditLimit = 200
-            };
-            cache.WriteLog("walletBalance", booking.CreditLimit);
-            cache.WriteLog("logs", new List<string> { $"Booking process initiated for traveler {booking.TravellerName}" });
-            await host.BookTravel(booking);
+
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -61,7 +48,7 @@ namespace TravelBooking
             {
                 foreach (var logentry in log)
                 {
-                    textBox1.Text += logentry;
+                    textBox1.Text += $"{logentry}:{wallet}";
                     textBox1.Text += Environment.NewLine;
                     wallet.ToString();
                     textBox1.Text += Environment.NewLine;
@@ -72,6 +59,32 @@ namespace TravelBooking
         private async void button1_Click(object sender, EventArgs e)
         {
             await host.DeleteQueues();
+            textBox1.Text += "done";
+
+        }
+
+        private async void button2_Click(object sender, EventArgs e)
+        {
+            host = new Host();
+            var cache = new CacheLogger();
+
+            cache.DeleteKey("logs");
+            cache.DeleteKey("walletBalance");
+            await host.Run(namespaceAddress, manageKeyName, manageKey);
+            textBox1.Text += "Start Booking Now";
+        }
+
+        private async void button3_Click(object sender, EventArgs e)
+        {
+            var booking = new Booking
+            {
+                TravellerName = "rahul",
+                Destination = "delhi",
+                CreditLimit = 150
+            };
+            cache.WriteLog("walletBalance", booking.CreditLimit);
+            cache.WriteLog("logs", new List<string> { $"Booking process initiated for traveler {booking.TravellerName}" });
+            await host.BookTravel(booking);
         }
     }
 }

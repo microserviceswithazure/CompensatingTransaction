@@ -116,12 +116,13 @@ namespace Workflow
             };
             await sender.SendAsync(message);
             Console.WriteLine("Sending booking message. Press any key after the workflow completes.");
-            var iter = saga.GetEnumerator();
-            while (iter.MoveNext())
-            {
-                var task = (Task)iter.Current;
-                task.RunSynchronously();
-            }
+            //var iter = saga.GetEnumerator();
+            //while (iter.MoveNext())
+            //{
+            //    var task = (Task)iter.Current;
+            //    task.RunSynchronously();
+            //    task.Wait();
+            //}
 
             ////Console.ReadKey();
             //sagaTerminator.Cancel();
