@@ -131,9 +131,12 @@ namespace Workflow
 
         public async Task DeleteQueues()
         {
-            foreach (var queueDescription in queues.Reverse())
+            if (queues != null)
             {
-                await this.namespaceManager.DeleteQueueAsync(queueDescription.Path);
+                foreach (var queueDescription in queues.Reverse())
+                {
+                    await this.namespaceManager.DeleteQueueAsync(queueDescription.Path);
+                }
             }
         }
     }
