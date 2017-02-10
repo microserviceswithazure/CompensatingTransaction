@@ -29,6 +29,7 @@ namespace TravelBooking
 
         private void TravelBooking_Load(object sender, EventArgs e)
         {
+            button2_Click(null, new EventArgs());
             cache = new CacheLogger();
             timer1.Enabled = true;
             pic1.Visible = false;
