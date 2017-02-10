@@ -108,6 +108,7 @@ namespace TravelBooking
             host = new Host();
             var cache = new CacheLogger();
             await host.DeleteQueues();
+            Thread.Sleep(TimeSpan.FromSeconds(15));
             cache.DeleteKey("logs");
             cache.DeleteKey("walletBalance");
             await host.Run(namespaceAddress, manageKeyName, manageKey);
